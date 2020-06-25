@@ -1,0 +1,9 @@
+[package]
+name = "ascii"
+version = "0.1.0"
+authors = ["Zach Schuermann <zachary.zvs@gmail.com>"]
+edition = "2018"
+default-run = "ascii"
+
+[profile.release]
+debug = true
