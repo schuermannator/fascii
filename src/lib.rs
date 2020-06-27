@@ -38,6 +38,7 @@ pub fn is_ascii(s: &str) -> bool {
     for _ in 0..(bytes.len() / 32) {
         // check 32 bytes at a time
         unsafe {
+            #[allow(clippy::cast_ptr_alignment)]
             if _mm256_testz_si256(_mm256_lddqu_si256(base as *const __m256i), mask) == 0 {
                 return false;
             }
