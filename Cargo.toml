@@ -5,5 +5,9 @@ authors = ["Zach Schuermann <zachary.zvs@gmail.com>"]
 edition = "2018"
 default-run = "fascii"
 
-[profile.release]
-debug = true
+[dev-dependencies]
+criterion = "0.3"
+
+[[bench]]
+name = "fascii_bench"
+harness = false
