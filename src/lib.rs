@@ -18,6 +18,9 @@ static ASCII_LIMIT: i8 = -128;
 /// ```
 #[inline(always)]
 pub fn is_ascii(s: String) -> bool {
+    if !is_x86_feature_detected!("avx2") {
+        panic!("Unsupported processor!");
+    }
     let bytes = s.as_bytes();
     // let padding = vec![0; 32 - bytes.len() % 32];
     // let bytes = [bytes, &padding[..]].concat();
