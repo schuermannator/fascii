@@ -10,15 +10,15 @@ static ASCII_LIMIT: i8 = -128;
 /// ```
 /// # use fascii::is_ascii;
 ///
-/// let ascii = "hello! this is a test weeeeeeee\n".to_string();
-/// let non_ascii = "Grüße, Jürgen ❤❤❤❤❤".to_string();
+/// let ascii = "hello! this is a test weeeeeeee\n";
+/// let non_ascii = "Grüße, Jürgen ❤❤❤❤❤";
 ///
 /// assert!(is_ascii(ascii));
 /// assert!(!is_ascii(non_ascii));
 /// ```
 #[inline(always)]
-pub fn is_ascii(s: String) -> bool {
-    if !is_x86_feature_detected!("avx2") {
+pub fn is_ascii(s: &str) -> bool {
+    if !is_x86_feature_detected!("avx") {
         panic!("Unsupported processor!");
     }
     let bytes = s.as_bytes();
@@ -30,12 +30,12 @@ pub fn is_ascii(s: String) -> bool {
         mask = _mm256_set1_epi8(ASCII_LIMIT);
     }
 
-    let length = bytes.len();
-    println!("{}", length);
-    assert!(length % 32 == 0);
+    // let length = bytes.len();
+    // println!("{}", length);
+    // assert!(length % 32 == 0);
 
     let mut base = bytes.as_ptr();
-    for _ in 0..(length / 32) {
+    for _ in 0..(bytes.len() / 32) {
         // check 32 bytes at a time
         unsafe {
             if _mm256_testz_si256(_mm256_lddqu_si256(base as *const __m256i), mask) == 0 {
@@ -54,13 +54,13 @@ mod tests {
     #[test]
     fn ascii() {
         let ascii = String::from("hello! this is a test weeeeeeee\n");
-        assert!(is_ascii(ascii));
+        assert!(is_ascii(&ascii));
     }
 
     #[test]
     fn non_ascii() {
         let non_ascii = String::from("Grüße, Jürgen ❤❤❤❤❤");
-        assert!(!is_ascii(non_ascii));
+        assert!(!is_ascii(&non_ascii));
     }
 
     // #[test]
